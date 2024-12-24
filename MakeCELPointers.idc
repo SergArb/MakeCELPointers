@@ -116,8 +116,12 @@ static main() {
 
 		// Check for P codes with Alphabetical characters in them
 		strPcode = form("%04X",currentCode);
-		if (substr(strPcode,0,1)  > "9") {alpha = 1;}
-		if (substr(strPcode,0,1) == "C") {alpha = 2;}
+		if (substr(strPcode,0,1)  > "9") {
+			alpha = 1;
+		}
+		if ((substr(strPcode,0,1) == "C") || (substr(strPcode,0,1) == "D")) {
+			alpha = 2;
+		}
 		if (currentCode == 0xFFFF)		{ endCheck = 0; Message("Found P code of FFFF\n"); }
 
 		pcodeEnabled = CheckEnabled(CelSwTable, currentCode, pcount);
@@ -231,6 +235,9 @@ static StringOfPcode(currentCode) {
 	strPcode = form("%04X",currentCode);
 	if (substr(strPcode,0,1) == "C") {
 		strPcode = form("U0%s", substr(strPcode,1,4));
+	} else
+	if (substr(strPcode,0,1) == "D") {
+		strPcode = form("U1%s", substr(strPcode,1,4));
 	} else {
 		strPcode = form("P%s", strPcode);
 	}
@@ -273,6 +280,9 @@ static CreatePcodeArray() {
 	SetArrayString(pcArray, 0x0057, "HO2S CIRCUIT LOW B2 S2");
 	SetArrayString(pcArray, 0x0058, "HO2S CIRCUIT HIGH B2 S2");
 	SetArrayString(pcArray, 0x0068, "MAP SENSOR RANGE/PERF");
+	SetArrayString(pcArray, 0x0071, "AMBIENT AIR TEMPERATURE SENSOR CIRCUIT A RANGE/PERFORMANCE");
+	SetArrayString(pcArray, 0x0072, "AMBIENT AIR TEMPERATURE SENSOR CIRCUIT A LOW");
+	SetArrayString(pcArray, 0x0073, "AMBIENT AIR TEMPERATURE SENSOR CIRCUIT A HIGH");
 	SetArrayString(pcArray, 0x0076, "INTAKE VALVE CIRCUIT LOW (BANK 1)");
 	SetArrayString(pcArray, 0x0077, "INTAKE VALVE CONTROL HIGH (BANK 1)");
 	SetArrayString(pcArray, 0x0082, "INTAKE VALVE CONTROL LOW (BANK 2)");
@@ -382,7 +392,6 @@ static CreatePcodeArray() {
 	SetArrayString(pcArray, 0x0335, "CRANKSHAFT POS. SENSOR A MALFUNCTION");
 	SetArrayString(pcArray, 0x0336, "CRANKSHAFT POS. SENSOR A RANGE/PERF");
 	SetArrayString(pcArray, 0x0340, "CAMSHAFT POS. SENSOR A MALFUNCTION");
-	SetArrayString(pcArray, 0x0340, "CAMSHAFT POS. SENSOR A MALFUNCTION");
 	SetArrayString(pcArray, 0x0341, "CAMSHAFT POS. SENSOR A RANGE/PERF");
 	SetArrayString(pcArray, 0x0345, "CAMSHAFT POS. SENSOR A BANK 2");
 	SetArrayString(pcArray, 0x0346, "CAMSHAFT POS. SENSOR A CIRCUIT RANGE/PERF BANK 2");
@@ -398,6 +407,8 @@ static CreatePcodeArray() {
 	SetArrayString(pcArray, 0x0390, "CAMSHAFT POS. SENSOR B BANK 2");
 	SetArrayString(pcArray, 0x0391, "CAMSHAFT POS. SENSOR B CIRCUIT RANGE/PERF BANK 2");
 	SetArrayString(pcArray, 0x0400, "EGR FLOW");
+	SetArrayString(pcArray, 0x0401, "EGR ABNORMAL (EGR AMOUNT TOO SMALL)");
+	SetArrayString(pcArray, 0x0402, "EGR A FLOW EXCESSIVE DETECTED");
 	SetArrayString(pcArray, 0x0410, "SECONDARY AIR PUMP SYSTEM");
 	SetArrayString(pcArray, 0x0411, "SECONDARY AIR PUMP INCORRECT FLOW");
 	SetArrayString(pcArray, 0x0413, "SECONDARY AIR PUMP A OPEN");
@@ -451,6 +462,12 @@ static CreatePcodeArray() {
 	SetArrayString(pcArray, 0x0562, "SYSTEM VOLTAGE LOW");
 	SetArrayString(pcArray, 0x0563, "SYSTEM VOLTAGE HIGH");
 	SetArrayString(pcArray, 0x0565, "CRUISE CONTROL SET SIGNAL");
+	SetArrayString(pcArray, 0x059F, "ACTIVE GRILLE AIR SHUTTER A PERFORMANCE/STUCK OFF");
+	SetArrayString(pcArray, 0x05A0, "ACTIVE GRILLE AIR SHUTTER A STUCK ON");
+	SetArrayString(pcArray, 0x05A1, "ACTIVE GRILLE AIR SHUTTER A POSITION SENSOR MINIMUM/MAXIMUM STOP PERFORMANCE");
+	SetArrayString(pcArray, 0x05A2, "ACTIVE GRILLE AIR SHUTTER A CONTROL CIRCUIT/OPEN");
+	SetArrayString(pcArray, 0x05A6, "ACTIVE GRILLE AIR SHUTTER A SUPPLY VOLTAGE CIRCUIT/OPEN");
+	SetArrayString(pcArray, 0x05C0, "ACTIVE GRILLE AIR SHUTTER MODULE A OVER TEMPERATURE");
 	SetArrayString(pcArray, 0x0600, "SERIAL COMMUNICATION LINK");
 	SetArrayString(pcArray, 0x0602, "CONTROL MODULE PROG. ERROR");
 	SetArrayString(pcArray, 0x0604, "CONTROL MODULE RAM ERROR");
@@ -464,6 +481,8 @@ static CreatePcodeArray() {
 	SetArrayString(pcArray, 0x062D, "NO.1 FUEL INJECTOR DRIVER CIRCUIT PERFORMANCE");
 	SetArrayString(pcArray, 0x062F, "EEPROM ERROR");
 	SetArrayString(pcArray, 0x0638, "THROTTLE ACTUATOR RANGE/PERF");
+	SetArrayString(pcArray, 0x065A, "GENERATOR/ALTERNATOR SYSTEM PERFORMANCE");
+	SetArrayString(pcArray, 0x0685, "ECM/PCM POWER RELAY CONTROL CIRCUIT/OPEN");
 	SetArrayString(pcArray, 0x0691, "RADIATOR FAN CIRCUIT LOW");
 	SetArrayString(pcArray, 0x0692, "RADIATOR FAN CIRCUIT HIGH");
 	SetArrayString(pcArray, 0x0700, "TRANSMISSION CONTROL SYSTEM");
@@ -491,6 +510,7 @@ static CreatePcodeArray() {
 	SetArrayString(pcArray, 0x0864, "TCM COMMUNICATION RANGE/PERF");
 	SetArrayString(pcArray, 0x0865, "TCM COMMUNICATION CIRCUIT LOW");
 	SetArrayString(pcArray, 0x0866, "TCM COMMUNICATION CIRCUIT HIGH");
+	SetArrayString(pcArray, 0x0A3B, "GENERATOR/ALTERNATOR OVER TEMPERATURE");
 	SetArrayString(pcArray, 0x1026, "VVL SYSTEMS 1 PERFORMANCE");
 	SetArrayString(pcArray, 0x1028, "VVL SYSTEMS 2 PERFORMANCE");
 	SetArrayString(pcArray, 0x1086, "TGV POS. 2 CIRCUIT LOW");
@@ -515,6 +535,8 @@ static CreatePcodeArray() {
 	SetArrayString(pcArray, 0x1160, "ABNORMAL RETURN SPRING");
 	SetArrayString(pcArray, 0x1170, "FUEL SYSTEM ABNORMAL (PORT)");
 	SetArrayString(pcArray, 0x117B, "FUEL SYSTEM ABNORMAL (DI)");
+	SetArrayString(pcArray, 0x1192, "FUEL RAIL PRESSURE SENSOR B CIRCUIT LOW");
+	SetArrayString(pcArray, 0x1193, "FUEL RAIL PRESSURE SENSOR B CIRCUIT HIGH");
 	SetArrayString(pcArray, 0x1235, "HIGH-PRESSURE FUEL PUMP ABNORMAL");
 	SetArrayString(pcArray, 0x1261, "DI INJECTOR CIRCUIT OPEN (CYLINDER 1)");
 	SetArrayString(pcArray, 0x1262, "DI INJECTOR CIRCUIT OPEN (CYLINDER 2)");
@@ -557,7 +579,9 @@ static CreatePcodeArray() {
 	SetArrayString(pcArray, 0x1603, "ENGINE STALL HISTORY");
 	SetArrayString(pcArray, 0x1604, "STARTABILITY MALFUNCTION");
 	SetArrayString(pcArray, 0x1616, "SBDS INTERACTIVE CODES");
+	SetArrayString(pcArray, 0x162A, "STARTER INTERLOCK INTERNAL CIRCUIT");
 	SetArrayString(pcArray, 0x1700, "TPS CIRCUIT MALFUNCTION (AT)");
+	SetArrayString(pcArray, 0x1C00, "BATTERY MONITOR MODULE A PERFORMANCE");
 	SetArrayString(pcArray, 0x2004, "TGV - INTAKE MANIFOLD RUNNER 1 STUCK OPEN");
 	SetArrayString(pcArray, 0x2005, "TGV - INTAKE MANIFOLD RUNNER 2 STUCK OPEN");
 	SetArrayString(pcArray, 0x2006, "TGV - INTAKE MANIFOLD RUNNER 1 STUCK CLOSED");
@@ -594,13 +618,22 @@ static CreatePcodeArray() {
 	SetArrayString(pcArray, 0x2135, "TPS A/B VOLTAGE");
 	SetArrayString(pcArray, 0x2138, "TPS D/E VOLTAGE");
 	SetArrayString(pcArray, 0x2158, "VEHICLE SPEED SENSOR B");
+	SetArrayString(pcArray, 0x2183, "ENGINE COOLANT TEMPERATURE SENSOR 2 CIRCUIT RANGE/PERFORMANCE");
+	SetArrayString(pcArray, 0x2184, "ENGINE COOLANT TEMPERATURE SENSOR 2 CIRCUIT LOW");
+	SetArrayString(pcArray, 0x2185, "ENGINE COOLANT TEMPERATURE SENSOR 2 CIRCUIT HIGH");
 	SetArrayString(pcArray, 0x2195, "O2 SENSOR SIGNAL BIASED/STUCK LEAN BANK 1 SENSOR 1");
 	SetArrayString(pcArray, 0x2196, "O2 SENSOR SIGNAL BIASED/STUCK RICH BANK 1 SENSOR 1");
 	SetArrayString(pcArray, 0x219A, "BANK 1 AFR IMBALANCE");
 	SetArrayString(pcArray, 0x219B, "BANK 2 AFR IMBALANCE");
+	SetArrayString(pcArray, 0x219C, "CYLINDER 1 AIR-FUEL RATIO IMBALANCE");
+	SetArrayString(pcArray, 0x219D, "CYLINDER 2 AIR-FUEL RATIO IMBALANCE");
+	SetArrayString(pcArray, 0x219E, "CYLINDER 3 AIR-FUEL RATIO IMBALANCE");
+	SetArrayString(pcArray, 0x219F, "CYLINDER 4 AIR-FUEL RATIO IMBALANCE");
 	SetArrayString(pcArray, 0x2227, "BARO. PRESSURE CIRCUIT RANGE/PERF");
 	SetArrayString(pcArray, 0x2228, "BARO. PRESSURE CIRCUIT LOW INPUT");
 	SetArrayString(pcArray, 0x2229, "BARO. PRESSURE CIRCUIT HIGH INPUT");
+	SetArrayString(pcArray, 0x2257, "AIR SYSTEM CONTROL A CIRCUIT LOW");
+	SetArrayString(pcArray, 0x2258, "AIR SYSTEM CONTROL A CIRCUIT HIGH");
 	SetArrayString(pcArray, 0x2270, "O2 SENSOR SIGNAL BIASED/STUCK LEAN BANK 1 SENSOR 2");
 	SetArrayString(pcArray, 0x2271, "O2 SENSOR SIGNAL BIASED/STUCK RICH BANK 1 SENSOR 2");
 	SetArrayString(pcArray, 0x2272, "O2 SENSOR SIGNAL BIASED/STUCK LEAN BANK 2 SENSOR 2");
@@ -618,12 +651,20 @@ static CreatePcodeArray() {
 	SetArrayString(pcArray, 0x2442, "SECONDARY AIR PUMP VALVE 2 STUCK OPEN");
 	SetArrayString(pcArray, 0x2443, "SECONDARY AIR PUMP 2 STUCK CLOSED");
 	SetArrayString(pcArray, 0x2444, "SECONDARY AIR PUMP 1 STUCK ON B1");
+	SetArrayString(pcArray, 0x24B9, "EVAP SYSTEM LEAK DETECTION PUMP PRESSURE SENSOR CIRCUIT RANGE/PERFORMANCE");
+	SetArrayString(pcArray, 0x24BA, "EVAP SYSTEM LEAK DETECTION PUMP PRESSURE SENSOR CIRCUIT LOW");
+	SetArrayString(pcArray, 0x24BB, "EVAP SYSTEM LEAK DETECTION PUMP PRESSURE SENSOR CIRCUIT HIGH");
 	SetArrayString(pcArray, 0x2503, "CHARGING SYSTEM VOLTAGE LOW");
 	SetArrayString(pcArray, 0x2504, "CHARGING SYSTEM VOLTAGE HIGH");
-	SetArrayString(pcArray, 0x2257, "AIR SYSTEM CONTROL A CIRCUIT LOW");
-	SetArrayString(pcArray, 0x2258, "AIR SYSTEM CONTROL A CIRCUIT HIGH");
+	SetArrayString(pcArray, 0x2530, "IGNITION SWITCH RUN POSITION CIRCUIT");
 	SetArrayString(pcArray, 0x2610, "ECM/PCM INTERNAL ENGINE OFF TIMER PERFORMANCE");
+	SetArrayString(pcArray, 0x2682, "ENGINE COOLANT BYPASS VALVE A CONTROL CIRCUIT LOW");
+	SetArrayString(pcArray, 0x26A3, "ENGINE COOLANT BYPASS VALVE A RANGE/PERFORMANCE");
+	SetArrayString(pcArray, 0x26A5, "ENGINE COOLANT BYPASS VALVE A POSITION SENSOR CIRCUIT RANGE/PERFORMANCE");
+	SetArrayString(pcArray, 0x26A6, "ENGINE COOLANT BYPASS VALVE A POSITION SENSOR CIRCUIT LOW");
+	SetArrayString(pcArray, 0x26A7, "ENGINE COOLANT BYPASS VALVE A POSITION SENSOR CIRCUIT HIGH");
 	SetArrayString(pcArray, 0xC073, "CAN COMMUNICATION BUS A OFF");
+	SetArrayString(pcArray, 0xC077, "LIN COMMUNICATION BUS ECM/PCM OFF");
 	SetArrayString(pcArray, 0xC100, "ENGINE DATA NOT RECEIVED");
 	SetArrayString(pcArray, 0xC101, "CAN LOST COMMUNICATION WITH TCM");
 	SetArrayString(pcArray, 0xC122, "CAN LOST COMMUNICATION WITH VDC");
@@ -633,15 +674,23 @@ static CreatePcodeArray() {
 	SetArrayString(pcArray, 0xC151, "LOST COMMUNICATION WITH AIR BAG");
 	SetArrayString(pcArray, 0xC155, "LOST COMMUNICATION WITH INSTRUMENT PANEL CLUSTER (IPC) CONTROL MODULE");
 	SetArrayString(pcArray, 0xC164, "MISSING DATA FOR AIR CONDITIONER");
+	SetArrayString(pcArray, 0xC284, "LOST COMMUNICATION WITH ACTIVE GRILLE SHUTTER MODULE A");
 	SetArrayString(pcArray, 0xC327, "MISSING DATA FOR SMART KEY COMPUTER ASSY");
 	SetArrayString(pcArray, 0xC401, "DATA ERROR FROM ENGINE");
 	SetArrayString(pcArray, 0xC402, "CAN INVALID DATA RECEIVED FROM TCM");
 	SetArrayString(pcArray, 0xC416, "CAN INVALID DATA RECEIVED FROM VDC");
+	SetArrayString(pcArray, 0xC420, "INVALID DATA RECEIVED FROM POWER STEERING CONTROL MODULE");
 	SetArrayString(pcArray, 0xC422, "CAN INVALID DATA RECEIVED FROM BIU");
 	SetArrayString(pcArray, 0xC423, "INVALID DATA RECEIVED FROM INSTRUMENT PANEL CLUSTER CONTROL MODULE");
 	SetArrayString(pcArray, 0xC424, "DATA ERROR FROM AIR CONDITIONER");
 	SetArrayString(pcArray, 0xC427, "DATA ERROR FROM SMART KEY COMPUTER ASSY");
 	SetArrayString(pcArray, 0xC428, "DATA ERROR FROM STEERING ANGLE SENSOR");
 	SetArrayString(pcArray, 0xC452, "DATA ERROR FROM AIR BAG");
+	SetArrayString(pcArray, 0xD120, "LOST COMMUNICATION WITH AUTOSTART STOP CONTROL MODULE");
+	SetArrayString(pcArray, 0xD235, "LOST COMMUNICATION WITH EyeSight");
+	SetArrayString(pcArray, 0xD433, "INVALID DATA RECEIVED FROM EyeSight");
+	SetArrayString(pcArray, 0xD469, "INVALID DATA RECEIVED FROM AUTOSTART STOP CONTROL MODULE");
+	SetArrayString(pcArray, 0xD712, "LOST LIN COMMUNICATION WITH BATTERY 1 MONITOR MODULE");
+	SetArrayString(pcArray, 0xD71F, "LOST LIN COMMUNICATION WITH GENERATOR");
 	SetArrayString(pcArray, 0xFFFE, "PASS CODE (NO DTC DETECTED)");
 }
